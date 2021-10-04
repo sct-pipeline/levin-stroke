@@ -1,0 +1,6 @@
+subjects:
+    sub-001DAH:
+        T1w: run-02
+        FLAIR: run-01
+    sub-002OEI:
+        FLAIR: run-01
