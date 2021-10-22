@@ -269,7 +269,6 @@ sct_process_segmentation -i ${file_t2s_seg}.nii.gz -angle-corr 0 -vert 3:4 -vert
 # ------------------------------------------------------------------------------
 file_dwi="${SUBJECT}_dwi"
 cd ../dwi
-file_dwi=$FILE_DWI
 file_bval=${file_dwi}.bval
 file_bvec=${file_dwi}.bvec
 # Separate b=0 and DW images
