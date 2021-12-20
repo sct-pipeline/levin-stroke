@@ -245,6 +245,12 @@ if [[ -e "${file_t1w}.nii.gz" && -e "${file_mton}.nii.gz" && -e "${file_mtoff}.n
   sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 51 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/MTR.csv -append 1
   sct_extract_metric -i mtsat.nii.gz -f label_axT1w/atlas -l 51 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/MTsat.csv -append 1
   sct_extract_metric -i t1map.nii.gz -f label_axT1w/atlas -l 51 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/T1.csv -append 1
+  #Compute MTR in dorsal columns
+  sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 53 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/MTR_in_DC.csv -append 1
+  #Compute MTR in lateral corticospinal tracts
+  sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 4,5 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/MTR_in_CST.csv -append 1
+  #Compute MTR in lateral reticulospinal tracts
+  sct_extract_metric -i mtr.nii.gz -f label_axT1w/atlas -l 10,11 -vert 2:5 -vertfile label_axT1w/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/MTR_in_RST.csv -append 1
 else
   echo "WARNING: MTS dataset is incomplete."
 fi
