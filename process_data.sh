@@ -109,7 +109,7 @@ segment_gm_if_does_not_exist(){
 select_subject_data(){
   arg1=$1
   arg2=$2
-  CONTRAST_CONFIG="$(cat $PATH_DATA/sub-config.yml | shyaml get-value subjects.$1.$2 '')"
+  CONTRAST_CONFIG="$(cat $PATH_DATA/include.yml | shyaml get-value subjects.$1.$2 '')"
   # echo Please enter the path of the subjects yaml
   # read path_subjects_yaml
 }
