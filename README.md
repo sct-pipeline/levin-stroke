@@ -21,3 +21,9 @@ The main steps involve:
 - QC analysis, manual correction of spinal cord masks and vertebral labeling
 - Re-run analysis with corrected masks
 - Aggregate results into CSV file
+
+How to use:
+```
+pip install -r requirements.txt
+sct_run_batch -jobs -1 -path-data ~/data/levin-stroke -path-output ~/levin_results/ -script ~/code/levin-stroke/process_data.sh
+```
