@@ -9,6 +9,9 @@ dcm2bids -d <PATH_TO_DICOM> -p sub-<ID> -c config_levin-stroke.txt
 
 Where `<ID>` is the subject ID, eg: `007PGA`
 
+The BIDS dataset is stored privately under `git-annex/datasets/levin-stroke`
+
+
 ## Process data
 
 Processing pipeline for project involving stroke patients. PI is Dr. Levin.
