@@ -1,5 +1,16 @@
 # levin-stroke
 
+## Get data into BIDS format
+
+Download dcm2bids and run (for one subject):
+~~~
+dcm2bids -d <PATH_TO_DICOM> -p sub-<ID> -c config_levin-stroke.txt
+~~~
+
+Where `<ID>` is the subject ID, eg: `007PGA`
+
+## Process data
+
 Processing pipeline for project involving stroke patients. PI is Dr. Levin.
 
 The processing pipeline outputs the following metrics:
