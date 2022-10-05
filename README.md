@@ -41,3 +41,7 @@ How to use:
 pip install -r requirements.txt
 sct_run_batch -jobs -1 -path-data ~/data/levin-stroke -path-output ~/levin_results/ -script ~/code/levin-stroke/process_data.sh
 ```
+
+## Results
+
+Results are available in releases: https://github.com/sct-pipeline/levin-stroke/releases
