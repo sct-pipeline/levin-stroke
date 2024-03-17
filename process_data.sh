@@ -301,10 +301,11 @@ sct_warp_template -d ${file_dwi_mean}.nii.gz -w warp_template2dwi.nii.gz -qc ${P
 sct_maths -i ${file_dwi_seg}.nii.gz -dilate 1 -shape ball -o ${file_dwi_seg}_dil.nii.gz
 # Compute DTI
 sct_dmri_compute_dti -i ${file_dwi}.nii.gz -bvec ${file_bvec} -bval ${file_bval} -method standard -m ${file_dwi_seg}_dil.nii.gz
-# Compute FA, MD and RD in WM between C2 and C5 vertebral levels
+# Compute DTI metrics in WM between C2 and C5 vertebral levels
 sct_extract_metric -i dti_FA.nii.gz -f label/atlas -l 51 -vert 2:5 -o ${PATH_RESULTS}/DWI_FA.csv -append 1
 sct_extract_metric -i dti_MD.nii.gz -f label/atlas -l 51 -vert 2:5 -o ${PATH_RESULTS}/DWI_MD.csv -append 1
 sct_extract_metric -i dti_RD.nii.gz -f label/atlas -l 51 -vert 2:5 -o ${PATH_RESULTS}/DWI_RD.csv -append 1
+sct_extract_metric -i dti_AD.nii.gz -f label/atlas -l 51 -vert 2:5 -o ${PATH_RESULTS}/DWI_AD.csv -append 1
 #Compute dti_FA in dorsal columns, lateral corticospinal tracts, lateral reticulospinal tracts
 sct_extract_metric -i dti_FA.nii.gz -f label/atlas -l 53 -vert 2:5 -o ${PATH_RESULTS}/DWI_FA_in_DC.csv -append 1
 sct_extract_metric -i dti_FA.nii.gz -f label/atlas -l 4,5 -vert 2:5 -o ${PATH_RESULTS}/DWI_FA_in_CST.csv -append 1
@@ -317,6 +318,10 @@ sct_extract_metric -i dti_MD.nii.gz -f label/atlas -l 10,11 -vert 2:5 -o ${PATH_
 sct_extract_metric -i dti_RD.nii.gz -f label/atlas -l 53 -vert 2:5 -o ${PATH_RESULTS}/DWI_RD_in_DC.csv -append 1
 sct_extract_metric -i dti_RD.nii.gz -f label/atlas -l 4,5 -vert 2:5 -o ${PATH_RESULTS}/DWI_RD_in_CST.csv -append 1
 sct_extract_metric -i dti_RD.nii.gz -f label/atlas -l 10,11 -vert 2:5 -o ${PATH_RESULTS}/DWI_RD_in_RST.csv -append 1
+#Compute dti_AD in dorsal columns, lateral corticospinal tracts, lateral reticulospinal tracts
+sct_extract_metric -i dti_AD.nii.gz -f label/atlas -l 53 -vert 2:5 -o ${PATH_RESULTS}/DWI_AD_in_DC.csv -append 1
+sct_extract_metric -i dti_AD.nii.gz -f label/atlas -l 4,5 -vert 2:5 -o ${PATH_RESULTS}/DWI_AD_in_CST.csv -append 1
+sct_extract_metric -i dti_AD.nii.gz -f label/atlas -l 10,11 -vert 2:5 -o ${PATH_RESULTS}/DWI_AD_in_RST.csv -append 1
 # Go back to parent folder
 cd ..
 
