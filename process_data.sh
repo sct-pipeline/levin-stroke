@@ -284,7 +284,7 @@ sct_get_centerline -i ${file_dwi}_dwi_mean.nii.gz -c dwi -qc ${PATH_QC} -qc-subj
 # Create mask to help motion correction and for faster processing
 sct_create_mask -i ${file_dwi}_dwi_mean.nii.gz -p centerline,${file_dwi}_dwi_mean_centerline.nii.gz -size 30mm
 # Motion correction
-sct_dmri_moco -i ${file_dwi}.nii.gz -bvec ${file_dwi}.bvec -m mask_${file_dwi}_dwi_mean.nii.gz -x spline
+sct_dmri_moco -i ${file_dwi}.nii.gz -bvec ${file_dwi}.bvec -m mask_${file_dwi}_dwi_mean.nii.gz -x spline -param metric=CC
 file_dwi=${file_dwi}_moco
 file_dwi_mean=${file_dwi}_dwi_mean
 # Segment spinal cord (only if it does not exist)
