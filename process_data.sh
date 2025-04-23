@@ -55,7 +55,7 @@ label_if_does_not_exist(){
     sct_deepseg totalspineseg -i ${file}.nii.gz
     sct_label_vertebrae -i ${file}.nii.gz -s ${file_seg}.nii.gz -c t1 -discfile ${file}_step1_levels.nii.gz
     # Create labels in the cord at C3 and C5 mid-vertebral levels
-    sct_label_utils -i ${file_seg}_labeled.nii.gz -vert-body 3,5 -o ${FILELABEL}.nii.gz
+    sct_label_utils -i ${file_seg}_labeled.nii.gz -vert-body 3,7 -o ${FILELABEL}.nii.gz
   fi
 }
 
