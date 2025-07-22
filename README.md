@@ -37,9 +37,14 @@ The main steps involve:
 - Aggregate results into CSV file
 
 How to use:
+Make sure the correct run is specified in case there are multiple runs per contrast. Modify the file:
+~~~
+~/data.neuro/levin-stroke
+~~~
+
+Then, run the analysis script:
 ```
-pip install -r requirements.txt
-sct_run_batch -jobs -1 -path-data ~/data/levin-stroke -path-output ~/levin_results/ -script ~/code/levin-stroke/process_data.sh
+sct_run_batch -jobs -1 -path-data ~/data.neuro/levin-stroke -path-output ~/levin_results/ -script ~/code/levin-stroke/process_data.sh
 ```
 
 ## Results
