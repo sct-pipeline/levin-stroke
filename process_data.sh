@@ -39,7 +39,6 @@ start=`date +%s`
 # not, perform labeling.
 label_if_does_not_exist(){
   local file="$1"
-  local file_seg="$2"
   # Update global variable with segmentation file name
   FILELABEL="${file}_totalspineseg_discs"
   FILELABELMANUAL="${PATH_DATA}/derivatives/labels/${SUBJECT}/anat/${FILELABEL}.nii.gz"
@@ -151,8 +150,8 @@ file_t1="${file_t1}_RPI_r"
 # Segment spinal cord (only if it does not exist)
 segment_if_does_not_exist $file_t1 "t1"
 file_t1_seg=$FILESEG
-# Create mid-vertebral levels in the cord (only if it does not exist)
-label_if_does_not_exist ${file_t1} ${file_t1_seg}
+# Label discs
+label_if_does_not_exist ${file_t1}
 file_label=$FILELABEL
 # Register to PAM50 template
 sct_register_to_template -i ${file_t1}.nii.gz -s ${file_t1_seg}.nii.gz -ldisc ${file_label}.nii.gz -c t1 -param step=1,type=seg,algo=centermassrot:step=2,type=seg,algo=syn,slicewise=1,smooth=0,iter=5:step=3,type=im,algo=syn,slicewise=1,smooth=0,iter=3 -qc ${PATH_QC} -qc-subject ${SUBJECT}
@@ -164,7 +163,7 @@ sct_warp_template -d ${file_t1}.nii.gz -w warp_template2T1w.nii.gz -a 0 -ofolder
 # Flatten scan along R-L direction (to make nice figures)
 sct_flatten_sagittal -i ${file_t1}.nii.gz -s ${file_t1_seg}.nii.gz
 # Compute average cord CSA between C2 and C3
-sct_process_segmentation -i ${file_t1_seg}.nii.gz -vert 2:3 -vertfile label_T1w/template/PAM50_levels.nii.gz -o ${PATH_RESULTS}/csa-SC_T1w.csv -append 1
+sct_process_segmentation -i ${file_t1_seg}.nii.gz -vert 2:3 -discfile ${file_label}.nii.gz -o ${PATH_RESULTS}/csa-SC_T1w.csv -append 1
 # Unset variables
 unset CONTRAST
 unset CONTRAST_CONFIG
@@ -188,12 +187,15 @@ file_t2="${file_t2}_RPI_r"
 # Segment spinal cord (only if it does not exist)
 segment_if_does_not_exist $file_t2 "t2"
 file_t2_seg=$FILESEG
+# Label discs
+label_if_does_not_exist ${file_t2}
+file_label=$FILELABEL
 # Flatten scan along R-L direction (to make nice figures)
 sct_flatten_sagittal -i ${file_t2}.nii.gz -s ${file_t2_seg}.nii.gz
 # Bring vertebral level into T2 space
 sct_register_multimodal -i label_T1w/template/PAM50_levels.nii.gz -d ${file_t2_seg}.nii.gz -o PAM50_levels2${file_t2}.nii.gz -identity 1 -x nn
 # Compute average cord CSA between C2 and C3
-sct_process_segmentation -i ${file_t2_seg}.nii.gz -vert 2:3 -vertfile PAM50_levels2${file_t2}.nii.gz -o ${PATH_RESULTS}/csa-SC_T2w.csv -append 1
+sct_process_segmentation -i ${file_t2_seg}.nii.gz -vert 2:3 -discfile ${file_label}.nii.gz -o ${PATH_RESULTS}/csa-SC_T2w.csv -append 1
 # Unset variables
 unset CONTRAST
 unset CONTRAST_CONFIG
