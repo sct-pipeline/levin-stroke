@@ -8,8 +8,6 @@
 # Manual segmentations or labels should be located under:
 # PATH_DATA/derivatives/labels/SUBJECT/<CONTRAST>/
 #
-# Authors: Alexandru Foias
-
 # The following global variables are retrieved from the caller sct_run_batch
 # but could be overwritten by uncommenting the lines below:
 # PATH_DATA_PROCESSED="~/data_processed"
@@ -43,19 +41,16 @@ label_if_does_not_exist(){
   local file="$1"
   local file_seg="$2"
   # Update global variable with segmentation file name
-  FILELABEL="${file}_labels"
-  FILELABELMANUAL="${PATH_DATA}/derivatives/labels/${SUBJECT}/anat/${FILELABEL}-manual.nii.gz"
+  FILELABEL="${file}_totalspineseg_discs"
+  FILELABELMANUAL="${PATH_DATA}/derivatives/labels/${SUBJECT}/anat/${FILELABEL}.nii.gz"
   echo "Looking for manual label: $FILELABELMANUAL"
   if [[ -e $FILELABELMANUAL ]]; then
     echo "Found! Using manual labels."
     rsync -avzh $FILELABELMANUAL ${FILELABEL}.nii.gz
   else
     echo "Not found. Proceeding with automatic labeling."
-    # Generate labeled segmentation
-    sct_deepseg totalspineseg -i ${file}.nii.gz
-    sct_label_vertebrae -i ${file}.nii.gz -s ${file_seg}.nii.gz -c t1 -discfile ${file}_step1_levels.nii.gz
-    # Create labels in the cord at C3 and C5 mid-vertebral levels
-    sct_label_utils -i ${file_seg}_labeled.nii.gz -vert-body 3,7 -o ${FILELABEL}.nii.gz
+    # Generate disc labels
+    sct_deepseg spine -i ${file}.nii.gz -qc ${PATH_QC} -qc-subject ${SUBJECT}
   fi
 }
 
@@ -160,14 +155,12 @@ file_t1_seg=$FILESEG
 label_if_does_not_exist ${file_t1} ${file_t1_seg}
 file_label=$FILELABEL
 # Register to PAM50 template
-sct_register_to_template -i ${file_t1}.nii.gz -s ${file_t1_seg}.nii.gz -l ${file_label}.nii.gz -c t1 -param step=1,type=seg,algo=centermassrot:step=2,type=seg,algo=syn,slicewise=1,smooth=0,iter=5:step=3,type=im,algo=syn,slicewise=1,smooth=0,iter=3 -qc ${PATH_QC} -qc-subject ${SUBJECT}
+sct_register_to_template -i ${file_t1}.nii.gz -s ${file_t1_seg}.nii.gz -ldisc ${file_label}.nii.gz -c t1 -param step=1,type=seg,algo=centermassrot:step=2,type=seg,algo=syn,slicewise=1,smooth=0,iter=5:step=3,type=im,algo=syn,slicewise=1,smooth=0,iter=3 -qc ${PATH_QC} -qc-subject ${SUBJECT}
 # Rename warping fields for clarity
 mv warp_template2anat.nii.gz warp_template2T1w.nii.gz
 mv warp_anat2template.nii.gz warp_T1w2template.nii.gz
 # Warp template without the white matter atlas (we don't need it at this point)
 sct_warp_template -d ${file_t1}.nii.gz -w warp_template2T1w.nii.gz -a 0 -ofolder label_T1w
-# Generate QC report to assess vertebral labeling
-sct_qc -i ${file_t1}.nii.gz -s label_T1w/template/PAM50_levels.nii.gz -p sct_label_vertebrae -qc ${PATH_QC} -qc-subject ${SUBJECT}
 # Flatten scan along R-L direction (to make nice figures)
 sct_flatten_sagittal -i ${file_t1}.nii.gz -s ${file_t1_seg}.nii.gz
 # Compute average cord CSA between C2 and C3
