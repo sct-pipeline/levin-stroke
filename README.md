@@ -1,5 +1,14 @@
 # levin-stroke
 
+## Setup
+
+Create and activate a conda virtual environment, then install the required Python packages:
+~~~
+conda create -n levin-stroke python=3.10
+conda activate levin-stroke
+pip install -r requirements.txt
+~~~
+
 ## Get data into BIDS format
 
 Download dcm2bids and run (for one subject):
@@ -37,10 +46,14 @@ The main steps involve:
 - Aggregate results into CSV file
 
 How to use:
-Make sure the correct run is specified in case there are multiple runs per contrast. Modify the file:
+Make sure the correct run is specified in case there are multiple runs per contrast. To do so, edit the `include.yml` file located at the root of the BIDS dataset (e.g. `~/data.neuro/levin-stroke/include.yml`), specifying the run/acq suffix to use for each subject and contrast:
 ~~~
-~/data.neuro/levin-stroke
+subjects:
+  sub-007PGA:
+    T1w: run-2
+    T2w: run-1
 ~~~
+If a contrast is left blank (or omitted) for a subject, the default filename (without a run/acq suffix) is used.
 
 Then, run the analysis script:
 ```
